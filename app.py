@@ -8,10 +8,6 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Sklearn
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-
 # Keras
 import tensorflow as tf
 from tensorflow.keras.models import Sequential # initialize neural network library
