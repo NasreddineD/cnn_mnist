@@ -66,18 +66,18 @@ model = load_model(MODEL_DIR)
 
 st.title('Reconnaissance de Chiffre Aléatoire')
 
-MODEL_DIR = os.path.join(os.path.dirname(__file__), 'test.csv')
-data = pd.read_csv(MODEL_DIR)
+# MODEL_DIR = os.path.join(os.path.dirname(__file__), 'test.csv')
+# data = pd.read_csv(MODEL_DIR)
 
-X_raw_final = data.values
-X_test_final = data.values.reshape(data.shape[0], 28, 28, 1)
+# X_raw_final = data.values
+# X_test_final = data.values.reshape(data.shape[0], 28, 28, 1)
 
-prediction = model.predict(X_test_final)
-prediction = np.argmax(prediction, axis=1)
+# prediction = model.predict(X_test_final)
+# prediction = np.argmax(prediction, axis=1)
 
-if st.button('Predict a random image from our dataframe'):
-    random_number = np.random.choice(data_test.shape[0])
-    st.write('Picture number ' + str(random_number))
-    st.write('Predicted number : ' + str(prediction[random_number]))
-    viz = viz_num(random_number)
-    st.pyplot(viz)
+# if st.button('Predict a random image from our dataframe'):
+#     random_number = np.random.choice(data_test.shape[0])
+#     st.write('Picture number ' + str(random_number))
+#     st.write('Predicted number : ' + str(prediction[random_number]))
+#     viz = viz_num(random_number)
+#     st.pyplot(viz)
