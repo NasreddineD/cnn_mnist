@@ -10,11 +10,11 @@ import matplotlib.pyplot as plt
 
 # Keras
 import tensorflow as tf
-from tensorflow.keras.models import Sequential # initialize neural network library
-from tensorflow.keras.layers import Dense, Dropout, Conv2D, MaxPooling2D, Flatten # build our layers library
-from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
+# from tensorflow.keras.models import Sequential # initialize neural network library
+# from tensorflow.keras.layers import Dense, Dropout, Conv2D, MaxPooling2D, Flatten # build our layers library
+# from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
-from tensorflow.keras.models import save_model, load_model
+from tensorflow.keras.models import load_model
 
 @st.cache(allow_output_mutation=True)
 def viz_num(num):
@@ -26,12 +26,15 @@ def viz_num(num):
     fig.show()
     return fig
 
-st.markdown(""" <style> img {
-width:200px !important; height:200px;} 
-</style> """, unsafe_allow_html=True)
+# st.markdown(""" <style> img {
+# width:200px !important; height:200px;} 
+# </style> """, unsafe_allow_html=True)
 
 MODEL_DIR = os.path.join(os.path.dirname(__file__), 'best_model.h5')
 model = load_model(MODEL_DIR)
+
+data_test = os.path.join(os.path.dirname(__file__), 'test.csv')
+data = pd.read_csv(data_test)
 
 # st.title('Reconnaissance de Chiffre Dessiné')
 
@@ -63,11 +66,7 @@ model = load_model(MODEL_DIR)
 #     st.write(f'result: {np.argmax(val[0])}')
 
 
-
 st.title('Reconnaissance de Chiffre Aléatoire')
-
-MODEL_DIR = os.path.join(os.path.dirname(__file__), 'test.csv')
-data = pd.read_csv(MODEL_DIR)
 
 X_raw_final = data.values
 X_test_final = data.values.reshape(data.shape[0], 28, 28, 1)
@@ -76,8 +75,8 @@ prediction = model.predict(X_test_final)
 prediction = np.argmax(prediction, axis=1)
 
 if st.button('Predict a random image from our dataframe'):
-    random_number = np.random.choice(data_test.shape[0])
-    #st.write('Picture number ' + str(random_number))
-    # st.write('Predicted number : ' + str(prediction[random_number]))
-    # viz = viz_num(random_number)
-    # st.pyplot(viz)
+    random_number = np.random.choice(data.shape[0])
+    st.write('Picture number ' + str(random_number))
+    st.write('Predicted number : ' + str(prediction[random_number]))
+    viz = viz_num(random_number)
+    st.pyplot(viz)
