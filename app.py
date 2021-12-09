@@ -1,82 +1,38 @@
-import os
 import streamlit as st
-from streamlit_drawable_canvas import st_canvas
 from PIL import Image
-
-# Data manip
-import numpy as np
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
-
-# Keras
 import tensorflow as tf
-# from tensorflow.keras.models import Sequential # initialize neural network library
-# from tensorflow.keras.layers import Dense, Dropout, Conv2D, MaxPooling2D, Flatten # build our layers library
-# from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 
-from tensorflow.keras.models import load_model
+reconstructed_model = tf.keras.models.load_model("C:/Users/Simplon/Google Drive/Nasreddine/Arturo/14 - DEEP LEARNING/03 - MNIST/git/best_model.h5")
 
-@st.cache(allow_output_mutation=True)
-def viz_num(num):
-    #Reshape the 768 values to a 28x28 image
-    image = X_raw_final[num].reshape([28,28])
-    fig = plt.figure(figsize=(1, 1))
-    plt.imshow(image, cmap=plt.get_cmap('gray'))
-    plt.axis("off")
-    fig.show()
-    return fig
+#Importer un csv
+csv_downloaded = pd.read_csv('C:/Users/Simplon/Google Drive/Nasreddine/Arturo/14 - DEEP LEARNING/03 - MNIST/git/test.csv',delimiter=',', decimal='.')
 
-# st.markdown(""" <style> img {
-# width:200px !important; height:200px;} 
-# </style> """, unsafe_allow_html=True)
+# preprocessing des inputs
+def preprocess(input):
+    input_preprocess = input / 255
+    input_preprocess = np.array(input).reshape((-1, 28, 28, 1))
+    return input_preprocess
 
-MODEL_DIR = os.path.join(os.path.dirname(__file__), 'best_model.h5')
-model = load_model(MODEL_DIR)
+# afficher l'image en input
+def see_img(input):
+    image = np.array(input).reshape([28,28])
+    fig, ax = plt.subplots()
+    ax.imshow(image, cmap=plt.get_cmap('gray'))
+    st.pyplot(fig)
 
-data_test = os.path.join(os.path.dirname(__file__), 'test.csv')
-data = pd.read_csv(data_test)
+def my_prediction():
+    # choisir une ligne au hasard dans le dataframe test
+    my_input = csv_downloaded.sample(n=1)
 
-# st.title('Reconnaissance de Chiffre Dessiné')
+    # afficher l'image en input
+    see_img(my_input)
 
+    # afficher la sortie cad le numero predit : print(argmax)
+    my_predict = np.argmax(reconstructed_model.predict(preprocess(my_input)), axis=1)
+    return str(my_predict)[1]
 
-# SIZE = 192
-# mode = st.checkbox("Draw (or Delete)?", True)
-# canvas_result = st_canvas(
-#     fill_color='#000000',
-#     stroke_width=20,
-#     stroke_color='#FFFFFF',
-#     background_color='#000000',
-#     width=SIZE,
-#     height=SIZE,
-#     drawing_mode="freedraw" if mode else "transform",
-#     key='canvas')
-
-# if canvas_result.image_data is not None:
-#     img = canvas_result.image_data
-
-#     image = Image.fromarray((img[:, :, 0]).astype(np.uint8))
-#     image = image.resize((28, 28))
-#     image = image.convert('L')
-#     image = (tf.keras.utils.img_to_array(image)/255)
-#     image = image.reshape(1,28,28,1)
-#     test_x = tf.convert_to_tensor(image)
-
-# if st.button('Predict'):
-#     val = model.predict(test_x)
-#     st.write(f'result: {np.argmax(val[0])}')
-
-
-st.title('Reconnaissance de Chiffre Aléatoire')
-
-X_raw_final = data.values
-X_test_final = data.values.reshape(data.shape[0], 28, 28, 1)
-
-prediction = model.predict(X_test_final)
-prediction = np.argmax(prediction, axis=1)
-
-if st.button('Predict a random image from our dataframe'):
-    random_number = np.random.choice(data.shape[0])
-    st.write('Picture number ' + str(random_number))
-    st.write('Predicted number : ' + str(prediction[random_number]))
-    viz = viz_num(random_number)
-    st.pyplot(viz)
+if st.button('Prédis moi un chiffre'):
+    st.write("Je vois un "+my_prediction())
