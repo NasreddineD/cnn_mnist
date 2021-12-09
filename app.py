@@ -33,51 +33,51 @@ width:200px !important; height:200px;}
 MODEL_DIR = os.path.join(os.path.dirname(__file__), 'best_model.h5')
 model = load_model(MODEL_DIR)
 
-st.title('Reconnaissance de Chiffre Dessiné')
+# st.title('Reconnaissance de Chiffre Dessiné')
 
 
-SIZE = 192
-mode = st.checkbox("Draw (or Delete)?", True)
-canvas_result = st_canvas(
-    fill_color='#000000',
-    stroke_width=20,
-    stroke_color='#FFFFFF',
-    background_color='#000000',
-    width=SIZE,
-    height=SIZE,
-    drawing_mode="freedraw" if mode else "transform",
-    key='canvas')
+# SIZE = 192
+# mode = st.checkbox("Draw (or Delete)?", True)
+# canvas_result = st_canvas(
+#     fill_color='#000000',
+#     stroke_width=20,
+#     stroke_color='#FFFFFF',
+#     background_color='#000000',
+#     width=SIZE,
+#     height=SIZE,
+#     drawing_mode="freedraw" if mode else "transform",
+#     key='canvas')
 
-if canvas_result.image_data is not None:
-    img = canvas_result.image_data
+# if canvas_result.image_data is not None:
+#     img = canvas_result.image_data
 
-    image = Image.fromarray((img[:, :, 0]).astype(np.uint8))
-    image = image.resize((28, 28))
-    image = image.convert('L')
-    image = (tf.keras.utils.img_to_array(image)/255)
-    image = image.reshape(1,28,28,1)
-    test_x = tf.convert_to_tensor(image)
+#     image = Image.fromarray((img[:, :, 0]).astype(np.uint8))
+#     image = image.resize((28, 28))
+#     image = image.convert('L')
+#     image = (tf.keras.utils.img_to_array(image)/255)
+#     image = image.reshape(1,28,28,1)
+#     test_x = tf.convert_to_tensor(image)
 
-if st.button('Predict'):
-    val = model.predict(test_x)
-    st.write(f'result: {np.argmax(val[0])}')
+# if st.button('Predict'):
+#     val = model.predict(test_x)
+#     st.write(f'result: {np.argmax(val[0])}')
 
 
 
 st.title('Reconnaissance de Chiffre Aléatoire')
 
+MODEL_DIR = os.path.join(os.path.dirname(__file__), 'test.csv')
+data = pd.read_csv(MODEL_DIR)
 
-uploaded_file = st.file_uploader("Choose a file")
-if uploaded_file is not None:
-    data_test = pd.read_csv(uploaded_file)
-    X_raw_final = data_test.values
-    X_test_final = data_test.values.reshape(data_test.shape[0], 28, 28, 1)
-    pred_testing = model.predict(X_test_final)
-    pred_testing = np.argmax(pred_testing, axis=1)
+X_raw_final = data.values
+X_test_final = data.values.reshape(data.shape[0], 28, 28, 1)
 
-    if st.button('Predict a random image from our dataframe'):
-        random_number = np.random.choice(28000)
-        st.write('Picture number ' + str(random_number))
-        st.write('Predicted number : ' + str(pred_testing[random_number]))
-        viz = viz_num(random_number)
-        st.pyplot(viz)
+prediction = model.predict(X_test_final)
+prediction = np.argmax(prediction, axis=1)
+
+if st.button('Predict a random image from our dataframe'):
+    random_number = np.random.choice(data_test.shape[0])
+    st.write('Picture number ' + str(random_number))
+    st.write('Predicted number : ' + str(prediction[random_number]))
+    viz = viz_num(random_number)
+    st.pyplot(viz)
