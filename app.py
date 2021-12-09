@@ -76,7 +76,7 @@ prediction = model.predict(X_test_final)
 prediction = np.argmax(prediction, axis=1)
 
 if st.button('Predict a random image from our dataframe'):
-    random_number = np.random.choice(data_test.shape[0])
+    #random_number = np.random.choice(data_test.shape[0])
     #st.write('Picture number ' + str(random_number))
     # st.write('Predicted number : ' + str(prediction[random_number]))
     # viz = viz_num(random_number)
