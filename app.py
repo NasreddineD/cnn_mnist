@@ -72,8 +72,8 @@ data = pd.read_csv(MODEL_DIR)
 X_raw_final = data.values
 X_test_final = data.values.reshape(data.shape[0], 28, 28, 1)
 
-# prediction = model.predict(X_test_final)
-# prediction = np.argmax(prediction, axis=1)
+prediction = model.predict(X_test_final)
+prediction = np.argmax(prediction, axis=1)
 
 # if st.button('Predict a random image from our dataframe'):
 #     random_number = np.random.choice(data_test.shape[0])
