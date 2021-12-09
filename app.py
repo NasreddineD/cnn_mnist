@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 from PIL import Image
 import pandas as pd
@@ -5,10 +6,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
-reconstructed_model = tf.keras.models.load_model("C:/Users/Simplon/Google Drive/Nasreddine/Arturo/14 - DEEP LEARNING/03 - MNIST/git/best_model.h5")
+MODEL_DIR = os.path.join(os.path.dirname(__file__), 'best_model.h5')
+reconstructed_model = tf.keras.models.load_model(MODEL_DIR)
+
+data_test = os.path.join(os.path.dirname(__file__), 'test.csv')
+csv_downloaded = pd.read_csv(data_test)
+
+# reconstructed_model = tf.keras.models.load_model("C:/Users/Simplon/Google Drive/Nasreddine/Arturo/14 - DEEP LEARNING/03 - MNIST/git/best_model.h5")
 
 #Importer un csv
-csv_downloaded = pd.read_csv('C:/Users/Simplon/Google Drive/Nasreddine/Arturo/14 - DEEP LEARNING/03 - MNIST/git/test.csv',delimiter=',', decimal='.')
+# csv_downloaded = pd.read_csv('C:/Users/Simplon/Google Drive/Nasreddine/Arturo/14 - DEEP LEARNING/03 - MNIST/git/test.csv',delimiter=',', decimal='.')
 
 # preprocessing des inputs
 def preprocess(input):
