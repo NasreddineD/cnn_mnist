@@ -69,8 +69,8 @@ st.title('Reconnaissance de Chiffre Aléatoire')
 MODEL_DIR = os.path.join(os.path.dirname(__file__), 'test.csv')
 data = pd.read_csv(MODEL_DIR)
 
-# X_raw_final = data.values
-# X_test_final = data.values.reshape(data.shape[0], 28, 28, 1)
+X_raw_final = data.values
+X_test_final = data.values.reshape(data.shape[0], 28, 28, 1)
 
 # prediction = model.predict(X_test_final)
 # prediction = np.argmax(prediction, axis=1)
